@@ -85,6 +85,7 @@ negativeButton.addEventListener("click", () => {
 
 let backspaceButton = document.querySelector(".backspace");
 backspaceButton.addEventListener("click", () => {
+    restartResult();
     backspace();
     updateDisplay();
     setResultOff();
@@ -199,6 +200,20 @@ function restartResult() {
     // for resetting progress after result is evaluated and we press a non operation/negative key
     if (operatorString === "" && onResult) {
         firstNumberString = "";
+    }
+}
+
+function backspace() {
+    if (secondNumberString !== "") {
+        console.assert(firstNumberString !== "" && operatorString !== "");
+        secondNumberString = secondNumberString.slice(0, -1);
+    } else if (operatorString !== "") {
+        console.assert(firstNumberString !== "");
+        operatorString = "";
+    } else if (firstNumberString !== "") {
+        firstNumberString = firstNumberString.slice(0, -1);
+    } else {
+        console.log("Can't backspace on blank");
     }
 }
 
