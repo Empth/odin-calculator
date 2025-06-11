@@ -27,6 +27,7 @@ let digitButtonArr = [...allDigitButtons];
 digitButtonArr.forEach(btn => {
     btn.addEventListener("click", (e) => {
         let digit = e.target.textContent;
+        restartResult();
         appendDigit(digit);
         updateDisplay();
         setResultOff();
@@ -59,6 +60,7 @@ clearButton.addEventListener("click", () => {
 
 let decimalButton = document.querySelector(".decimal");
 decimalButton.addEventListener("click", () => {
+    restartResult();
     appendDecimal();
     updateDisplay();
     setResultOff();
@@ -81,6 +83,13 @@ negativeButton.addEventListener("click", () => {
     updateDisplay();
 })
 
+let backspaceButton = document.querySelector(".backspace");
+backspaceButton.addEventListener("click", () => {
+    backspace();
+    updateDisplay();
+    setResultOff();
+})
+
 // event loop: 
 // occupy firstNumberString 
 // => occupy operatorString and update curOperator
@@ -92,26 +101,22 @@ function appendDigit(n) {
     // append string n to firstNumberString if operatorString 
     // is empty or secondNumberString o/w
     if (operatorString === "") {
-        if (onResult) {
-            firstNumberString = "";
-        }
         if (firstNumberString == "-0") {
             firstNumberString = "-";
         }
+        if (firstNumberString.length > 16) { return; }
         firstNumberString = (firstNumberString === "0") ? n : firstNumberString+n; // for leading zeroes
     } else {
         if (secondNumberString == "-0") {
             secondNumberString = "-";
         }
+        if (secondNumberString.length > 16) { return; }
         secondNumberString = (secondNumberString === "0") ? n : secondNumberString+n;
     }
 }
 
 function appendDecimal() {
     if (operatorString === "") {
-        if (onResult) {
-            firstNumberString = "";
-        }
         if (firstNumberString.includes(".")) { return; }
         firstNumberString = (firstNumberString === "" ||
         firstNumberString === "-") ? firstNumberString+"0." : firstNumberString+"."; // for 0. on blank
@@ -187,6 +192,13 @@ function makeNegative() {
     } else {
         secondNumberString = secondNumberString.includes("-") 
         ? secondNumberString.slice(1) : "-"+secondNumberString;
+    }
+}
+
+function restartResult() {
+    // for resetting progress after result is evaluated and we press a non operation/negative key
+    if (operatorString === "" && onResult) {
+        firstNumberString = "";
     }
 }
 
