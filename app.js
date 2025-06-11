@@ -45,14 +45,21 @@ opButtonArr.forEach(btn => {
 })
 
 let equalButton = document.querySelector(".equal");
-equalButton.addEventListener("click", (e) => {
+equalButton.addEventListener("click", () => {
     evaluate();
     updateDisplay();
 })
 
 let clearButton = document.querySelector(".clear");
-clearButton.addEventListener("click", (e) => {
+clearButton.addEventListener("click", () => {
     clear();
+    updateDisplay();
+    setResultOff();
+})
+
+let decimalButton = document.querySelector(".decimal");
+decimalButton.addEventListener("click", () => {
+    appendDecimal();
     updateDisplay();
     setResultOff();
 })
@@ -71,9 +78,22 @@ function appendDigit(n) {
         if (onResult) {
             firstNumberString = "";
         }
-        firstNumberString = (firstNumberString === "0") ? n : firstNumberString+n;
+        firstNumberString = (firstNumberString === "0") ? n : firstNumberString+n; // for leading zeroes
     } else {
         secondNumberString = (secondNumberString === "0") ? n : secondNumberString+n;
+    }
+}
+
+function appendDecimal() {
+    if (operatorString === "") {
+        if (onResult) {
+            firstNumberString = "";
+        }
+        if (firstNumberString.includes(".")) { return; }
+        firstNumberString = (firstNumberString === "") ? "0." : firstNumberString+"."; // for 0. on blank
+    } else {
+        if (secondNumberString.includes(".")) { return; }
+        secondNumberString = (secondNumberString === "") ? "0." : secondNumberString+".";
     }
 }
 
