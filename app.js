@@ -64,6 +64,14 @@ decimalButton.addEventListener("click", () => {
     setResultOff();
 })
 
+let precisionButton = document.querySelector(".precise");
+precisionButton.addEventListener("click", () => {
+    round = prompt("Enter degree of precision (e.g. 3 for round to 3 decimal places)", round);
+    clear();
+    updateDisplay();
+    setResultOff();  
+})
+
 // event loop: 
 // occupy firstNumberString 
 // => occupy operatorString and update curOperator
