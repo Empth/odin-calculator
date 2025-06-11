@@ -71,9 +71,9 @@ function appendDigit(n) {
         if (onResult) {
             firstNumberString = "";
         }
-        firstNumberString += n;
+        firstNumberString = (firstNumberString === "0") ? n : firstNumberString+n;
     } else {
-        secondNumberString += n;
+        secondNumberString = (secondNumberString === "0") ? n : secondNumberString+n;
     }
 }
 
@@ -97,6 +97,10 @@ function evaluate() {
     // 2nd digit and op strings to empty str
     if (secondNumberString === "") {
         alert("Need to enter second number!");
+        return;
+    }
+    if (operatorString === "÷" && +secondNumberString === 0) {
+        alert(":^)")
         return;
     }
     let result = operate(operatorMapFunc[operatorString], +firstNumberString, +secondNumberString);
