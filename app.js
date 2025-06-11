@@ -66,10 +66,19 @@ decimalButton.addEventListener("click", () => {
 
 let precisionButton = document.querySelector(".precise");
 precisionButton.addEventListener("click", () => {
-    round = prompt("Enter degree of precision (e.g. 3 for round to 3 decimal places)", round);
+    let formerRound = round; // for null
+    round = prompt("Enter degree of precision (e.g. 3 for round to 3 decimal places). "
+        +"Enter none to disable precision.", round);
+    round = round === null ? formerRound : round
     clear();
     updateDisplay();
     setResultOff();  
+})
+
+let negativeButton = document.querySelector(".negative");
+negativeButton.addEventListener("click", () => {
+    makeNegative();
+    updateDisplay();
 })
 
 // event loop: 
@@ -86,8 +95,14 @@ function appendDigit(n) {
         if (onResult) {
             firstNumberString = "";
         }
+        if (firstNumberString == "-0") {
+            firstNumberString = "-";
+        }
         firstNumberString = (firstNumberString === "0") ? n : firstNumberString+n; // for leading zeroes
     } else {
+        if (secondNumberString == "-0") {
+            secondNumberString = "-";
+        }
         secondNumberString = (secondNumberString === "0") ? n : secondNumberString+n;
     }
 }
@@ -98,17 +113,19 @@ function appendDecimal() {
             firstNumberString = "";
         }
         if (firstNumberString.includes(".")) { return; }
-        firstNumberString = (firstNumberString === "") ? "0." : firstNumberString+"."; // for 0. on blank
+        firstNumberString = (firstNumberString === "" ||
+        firstNumberString === "-") ? firstNumberString+"0." : firstNumberString+"."; // for 0. on blank
     } else {
         if (secondNumberString.includes(".")) { return; }
-        secondNumberString = (secondNumberString === "") ? "0." : secondNumberString+".";
+        secondNumberString = (secondNumberString === "" ||
+        secondNumberString === "-") ? secondNumberString+"0." : secondNumberString+".";
     }
 }
 
 function updateOp(input) {
     // Updates operatorString to input, which
     // can be empty str, +, -, ×, ÷
-    if (firstNumberString === "") {
+    if (firstNumberString === "" || firstNumberString === "-") {
         alert("Need to enter first number!");
         return;
     }
@@ -116,19 +133,25 @@ function updateOp(input) {
 }
 
 function updateDisplay() {
-    display.textContent = firstNumberString + operatorString + secondNumberString;
+    let parenthesize = false; // for add/subtraction of negatives
+    if (secondNumberString.includes("-") && 
+    (operatorString === "-" || operatorString === "+")) {
+        parenthesize = true;
+    }
+    let displayedSecondNumberString = parenthesize ? "("+secondNumberString+")" : secondNumberString
+    display.textContent = firstNumberString + operatorString + displayedSecondNumberString;
 }
 
 function evaluate() {
     // evaluate 1st and 2nd digits under op.
     // Also sets 1st digit to result and 
     // 2nd digit and op strings to empty str
-    if (secondNumberString === "") {
+    if (secondNumberString === "" || secondNumberString === "-") {
         alert("Need to enter second number!");
         return;
     }
     if (operatorString === "÷" && +secondNumberString === 0) {
-        alert(":^)")
+        alert("You can't do that :^)")
         return;
     }
     let result = operate(operatorMapFunc[operatorString], +firstNumberString, +secondNumberString);
@@ -145,12 +168,26 @@ function clear() {
 }
 
 function roundToDecimal(num, place) {
+    if (round === "none") {
+        return num;
+    }
     return Math.round((num + Number.EPSILON) * 10**place) / 10**place 
     // eps to ensure correct rounding
 }
 
 function setResultOff() {
     onResult = false;
+}
+
+function makeNegative() {
+    // makes cur digit negative or reverts negativity if already negative
+    if (operatorString === "") {
+        firstNumberString = firstNumberString.includes("-") 
+        ? firstNumberString.slice(1) : "-"+firstNumberString;
+    } else {
+        secondNumberString = secondNumberString.includes("-") 
+        ? secondNumberString.slice(1) : "-"+secondNumberString;
+    }
 }
 
 
