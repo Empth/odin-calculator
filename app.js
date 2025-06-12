@@ -194,7 +194,7 @@ function evaluate() {
         return;
     }
     let result = operate(operatorMapFunc[operatorString], +firstNumberString, +secondNumberString);
-    result = roundToDecimal(result, 10); // cutoff of 10 deals with 0.1 + 0.2 cases
+    result = (+truncateDecimal(result.toString(), 10)) // this handles 0.1 + 0.2 hell
     display.textContent = result.toString();
     firstNumberString = result.toString();
     secondNumberString = operatorString = "";
@@ -204,14 +204,6 @@ function evaluate() {
 function clear() {
     // clears stored digits, op
     firstNumberString = secondNumberString = operatorString = "";
-}
-
-function roundToDecimal(num, place) {
-    if (round === "none") {
-        return num;
-    }
-    return Math.round((num + Number.EPSILON) * 10**place) / 10**place 
-    // eps to ensure correct rounding
 }
 
 function setResultOff() {
@@ -251,28 +243,35 @@ function backspace() {
 }
 
 function truncateDecimal(str, maxDecimals) {
-    /*
-  // make sure we're working with a string
-  str = String(str);
+    // Thanks chatgpt! :^)
+    str = String(str);
 
-  // find the decimal point
-  const dotIndex = str.indexOf('.');
-  if (dotIndex === -1) {
-    // no decimal point ⇒ nothing to truncate
-    return str;
-  }
+    // find if there's an exponent part: 'e' or 'E'
+    const eIndex = str.search(/e/i);
+    let mantissa, exponent;
+    if (eIndex === -1) {
+        mantissa = str;
+        exponent = '';
+    } else {
+        mantissa = str.slice(0, eIndex);
+        exponent = str.slice(eIndex); // includes the 'e' or 'E' and everything after
+    }
 
-  // how many decimals are actually there
-  const actualDecimals = str.length - dotIndex - 1;
-  if (actualDecimals <= maxDecimals) {
-    // already within limit ⇒ return original (preserves ".0", ".00", etc.)
-    return str;
-  }
+    const dotIndex = mantissa.indexOf('.');
+    if (dotIndex === -1) {
+        // no decimal point ⇒ nothing to truncate on the mantissa
+        return mantissa + exponent;
+    }
 
-  // cut off after dot + maxDecimals
-  return str.slice(0, dotIndex + 1 + maxDecimals);
-  */
-    return str;
+    const actualDecimals = mantissa.length - dotIndex - 1;
+    if (actualDecimals <= maxDecimals) {
+        // already within limit ⇒ return original mantissa (preserves any trailing zeros)
+        return mantissa + exponent;
+    }
+
+    // cut off after dot + maxDecimals
+    const truncatedMantissa = mantissa.slice(0, dotIndex + 1 + maxDecimals);
+    return truncatedMantissa + exponent;
 }
 
 
