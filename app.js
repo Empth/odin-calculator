@@ -37,6 +37,7 @@ digitButtonArr.forEach(btn => {
         appendDigit(digit);
         updateDisplay();
         setResultOff();
+        e.target.blur(); // this removes focus from button after click
     });
 })
 
@@ -49,28 +50,32 @@ opButtonArr.forEach(btn => {
         updateOp(op);
         updateDisplay();
         setResultOff();
+        e.target.blur();
     });
 })
 
 let equalButton = document.querySelector(".equal");
-equalButton.addEventListener("click", () => {
+equalButton.addEventListener("click", (e) => {
     evaluate();
     updateDisplay();
+    e.target.blur();
 })
 
 let clearButton = document.querySelector(".clear");
-clearButton.addEventListener("click", () => {
+clearButton.addEventListener("click", (e) => {
     clear();
     updateDisplay();
     setResultOff();
+    e.target.blur();
 })
 
 let decimalButton = document.querySelector(".decimal");
-decimalButton.addEventListener("click", () => {
+decimalButton.addEventListener("click", (e) => {
     restartResult();
     appendDecimal();
     updateDisplay();
     setResultOff();
+    e.target.blur();
 })
 
 let precisionButton = document.querySelector(".precise");
@@ -85,17 +90,19 @@ precisionButton.addEventListener("click", () => {
 })
 
 let negativeButton = document.querySelector(".negative");
-negativeButton.addEventListener("click", () => {
+negativeButton.addEventListener("click", (e) => {
     makeNegative();
     updateDisplay();
+    e.target.blur();
 })
 
 let backspaceButton = document.querySelector(".backspace");
-backspaceButton.addEventListener("click", () => {
+backspaceButton.addEventListener("click", (e) => {
     restartResult();
     backspace();
     updateDisplay();
     setResultOff();
+    e.target.blur();
 })
 
 document.addEventListener('keypress', (e) => {
@@ -241,6 +248,6 @@ function backspace() {
     }
 }
 
-//345098+234 then n cause 234 to disappear
+//345098+234 then n cause 234 to disappear FIXED
 
 
