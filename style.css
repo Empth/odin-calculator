@@ -30,9 +30,9 @@
 
 .display {
     background-color: rgb(80, 97, 91);
-    width: 233px;
+    width: 239px;
     height: 80px;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 10px;
     padding-top: 20px;
     color: rgb(36, 49, 44);
@@ -58,14 +58,11 @@
     background-color: rgb(75, 75, 109);
 }
 
-.row.row-zero {
-}
-
 .row button {
     height: 45px;
     width: 45px;
     background-color: rgb(118, 86, 142);
-    border-radius: 5px;
+    border-radius: 7px;
     border-width: 3px;
 }
 
@@ -73,7 +70,7 @@
     width: 107.5px;
 }
 
-p.cheat{
+div.cheat{
     margin-top: 20px;
     color: rgb(171, 171, 171);
     font-weight: bold;
@@ -83,5 +80,15 @@ p.cheat{
 .precise {
     margin-top: 10px;
     background-color: rgb(204, 204, 204);
+}
+
+.row button.negative {
+    font-size: 20px;
+    font-weight: 1000;
+}
+
+.row button.backspace p {
+    font-weight: 1000;
+    font-size: 40px;
 }
 

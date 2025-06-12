@@ -2,7 +2,7 @@ const KEY_MAP = {"0": "zero", "1": "one", "2":"two", "3": "three", "4": "four",
     "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine", "+": "plus",
     "-": "minus", "*": "times", "/": "divide", "c": "clear", ".": "decimal", 
     "Enter": 'equal', "n": "negative", "Backspace": "backspace", "=": "equal"}; // TODO add proper backspace
-let round = 3; // Number of digits to round to
+let round = 4; // Number of digits to round to
 
 let add = (a,b) => a+b;
 let subtract = (a,b) => a-b;
@@ -81,8 +81,8 @@ decimalButton.addEventListener("click", (e) => {
 let precisionButton = document.querySelector(".precise");
 precisionButton.addEventListener("click", () => {
     let formerRound = round; // for null
-    round = prompt("Enter degree of precision (e.g. 3 for round to 3 decimal places). "
-        +"Enter none to disable precision.", round);
+    round = prompt("Enter degree of precision to show in result (e.g. 4 to truncate displayed result to 4 decimal places). "
+        +"Enter none to disable truncation.", round);
     round = round === null ? formerRound : round
     clear();
     updateDisplay();
