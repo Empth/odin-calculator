@@ -221,11 +221,11 @@ function setResultOff() {
 function makeNegative() {
     // makes cur digit negative or reverts negativity if already negative
     if (operatorString === "") {
-        firstNumberString = firstNumberString.includes("-") 
-        ? firstNumberString.slice(1) : "-"+firstNumberString;
+            firstNumberString = firstNumberString[0] === "-"
+            ? firstNumberString.slice(1) : "-"+firstNumberString;
     } else {
-        secondNumberString = secondNumberString.includes("-") 
-        ? secondNumberString.slice(1) : "-"+secondNumberString;
+            secondNumberString = secondNumberString[0] === "-"
+            ? secondNumberString.slice(1) : "-"+secondNumberString;
     }
 }
 
@@ -251,6 +251,7 @@ function backspace() {
 }
 
 function truncateDecimal(str, maxDecimals) {
+    /*
   // make sure we're working with a string
   str = String(str);
 
@@ -270,6 +271,8 @@ function truncateDecimal(str, maxDecimals) {
 
   // cut off after dot + maxDecimals
   return str.slice(0, dotIndex + 1 + maxDecimals);
+  */
+    return str;
 }
 
 
