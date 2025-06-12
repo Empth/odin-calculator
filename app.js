@@ -1,4 +1,8 @@
-let round = 4 // Number of digits to round to
+const KEY_MAP = {"0": "zero", "1": "one", "2":"two", "3": "three", "4": "four", 
+    "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine", "+": "plus",
+    "-": "minus", "*": "times", "/": "divide", "c": "clear", ".": "decimal", 
+    "Enter": 'equal', "n": "negative", "Backspace": "backspace", "=": "equal"}; // TODO add proper backspace
+let round = 4; // Number of digits to round to
 
 let add = (a,b) => a+b;
 let subtract = (a,b) => a-b;
@@ -22,6 +26,8 @@ let operatorMapFunc = {"": defaultOperator, "+": add, "-": subtract, "×": multi
 
 let onResult = false;
 
+let clickEvent = new CustomEvent("click");
+
 let allDigitButtons = document.querySelectorAll(".digit");
 let digitButtonArr = [...allDigitButtons];
 digitButtonArr.forEach(btn => {
@@ -33,6 +39,7 @@ digitButtonArr.forEach(btn => {
         setResultOff();
     });
 })
+
 
 let allOpButtons = document.querySelectorAll(".op");
 let opButtonArr = [...allOpButtons];
@@ -89,6 +96,23 @@ backspaceButton.addEventListener("click", () => {
     backspace();
     updateDisplay();
     setResultOff();
+})
+
+document.addEventListener('keypress', (e) => {
+    let keyPress = e.key;
+    if (keyPress in KEY_MAP) {
+        let keyButton = document.querySelector("."+KEY_MAP[keyPress]);
+        keyButton.dispatchEvent(clickEvent);
+    }
+})
+
+document.addEventListener('keyup', (e) => {
+    let keyPress = e.key;
+    console.log(keyPress)
+    if (keyPress === "Backspace") {
+        let keyButton = document.querySelector("."+KEY_MAP[keyPress]);
+        keyButton.dispatchEvent(clickEvent);
+    }
 })
 
 // event loop: 
@@ -216,5 +240,7 @@ function backspace() {
         console.log("Can't backspace on blank");
     }
 }
+
+//345098+234 then n cause 234 to disappear
 
 
