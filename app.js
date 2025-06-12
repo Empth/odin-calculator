@@ -81,8 +81,8 @@ decimalButton.addEventListener("click", (e) => {
 let precisionButton = document.querySelector(".precise");
 precisionButton.addEventListener("click", () => {
     let formerRound = round; // for null
-    round = prompt("Enter degree of precision to show in result (e.g. 4 to truncate displayed result to 4 decimal places). "
-        +"Enter none to disable truncation.", round);
+    round = prompt("Enter degree of precision to show in displayed numbers "+
+        "(e.g. 4 to truncate displayed number to 4 decimal places).", round);
     round = round === null ? formerRound : round
     clear();
     updateDisplay();
@@ -175,8 +175,10 @@ function updateDisplay() {
     (operatorString === "-" || operatorString === "+")) {
         parenthesize = true;
     }
-    let displayedSecondNumberString = parenthesize ? "("+secondNumberString+")" : secondNumberString
-    display.textContent = firstNumberString + operatorString + displayedSecondNumberString;
+    let displayedSecondNumberString = parenthesize ? "("
+    +truncateDecimal(secondNumberString, round)+")" : secondNumberString
+    display.textContent = truncateDecimal(firstNumberString, round) 
+    + operatorString + displayedSecondNumberString;
 }
 
 function evaluate() {
@@ -192,7 +194,7 @@ function evaluate() {
         return;
     }
     let result = operate(operatorMapFunc[operatorString], +firstNumberString, +secondNumberString);
-    result = roundToDecimal(result, round);
+    result = roundToDecimal(result, 10); // cutoff of 10 deals with 0.1 + 0.2 cases
     display.textContent = result.toString();
     firstNumberString = result.toString();
     secondNumberString = operatorString = "";
@@ -248,6 +250,26 @@ function backspace() {
     }
 }
 
-//345098+234 then n cause 234 to disappear FIXED
+function truncateDecimal(str, maxDecimals) {
+  // make sure we're working with a string
+  str = String(str);
+
+  // find the decimal point
+  const dotIndex = str.indexOf('.');
+  if (dotIndex === -1) {
+    // no decimal point ⇒ nothing to truncate
+    return str;
+  }
+
+  // how many decimals are actually there
+  const actualDecimals = str.length - dotIndex - 1;
+  if (actualDecimals <= maxDecimals) {
+    // already within limit ⇒ return original (preserves ".0", ".00", etc.)
+    return str;
+  }
+
+  // cut off after dot + maxDecimals
+  return str.slice(0, dotIndex + 1 + maxDecimals);
+}
 
 
